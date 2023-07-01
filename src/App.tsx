@@ -2,11 +2,12 @@ import {
   ConnectWallet,
   useActiveClaimConditionForWallet,
   useAddress,
-  useClaimConditions,
+  usePassClaim,
   useClaimedNFTSupply,
   useClaimerProofs,
   useClaimIneligibilityReasons,
   useContract,
+  useContractWrite,
   useContractMetadata,
   useNFT,
   useUnclaimedNFTSupply,
@@ -52,7 +53,7 @@ export default function Home() {
   root.classList.add(theme);
   const address = useAddress();
   const [quantity, setQuantity] = useState(1);
-  const claimConditions = useClaimConditions(contractQuery.contract);
+  const PassClaim = usePassClaim(contractQuery.contract);
   const activeClaimCondition = useActiveClaimConditionForWallet(
     contractQuery.contract,
     address,
@@ -241,22 +242,22 @@ export default function Home() {
 
   const dropNotReady = useMemo(
     () =>
-      claimConditions.data?.length === 0 ||
-      claimConditions.data?.every((cc) => cc.maxClaimableSupply === "0"),
-    [claimConditions.data],
+      PassClaim.data?.length === 0 ||
+      PassClaim.data?.every((cc) => cc.maxClaimableSupply === "0"),
+    [PassClaim.data],
   );
 
   const dropStartingSoon = useMemo(
     () =>
-      (claimConditions.data &&
-        claimConditions.data.length > 0 &&
+      (PassClaim.data &&
+        PassClaim.data.length > 0 &&
         activeClaimCondition.isError) ||
       (activeClaimCondition.data &&
         activeClaimCondition.data.startTime > new Date()),
     [
       activeClaimCondition.data,
       activeClaimCondition.isError,
-      claimConditions.data,
+      PassClaim.data,
     ],
   );
 
